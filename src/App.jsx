@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
-import AddContact from './component/AddContact.jsx';
 import ContactList from './component/ContactList.jsx';
 import Header from './component/Header.jsx';
 import Input from './component/Input.jsx';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from './config/Firebase.js';
-import useOpenClose from './hooks/useOpenClose.jsx';
 
 function App() {
   const [contact, setContact] = useState([]);
-  const { isOpen, close, openList } = useOpenClose();
 
   useEffect(() => {
     const getContacts = async () => {
@@ -55,9 +52,8 @@ function App() {
   return (
     <div className='bg-gray-800'>
       <Header />
-      <Input openList={openList} FilterContact={FilterContact} />
-      <AddContact isOpen={isOpen} close={close} contact={contact} isUpdate />
-      <ContactList contact={contact} openList={openList} />
+      <Input FilterContact={FilterContact} />
+      <ContactList contact={contact} />
     </div>
   );
 }
