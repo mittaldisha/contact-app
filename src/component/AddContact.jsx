@@ -4,7 +4,9 @@ import { ImCross } from 'react-icons/im';
 import { db } from '../config/Firebase';
 import { useEffect } from 'react';
 
+
 function AddContact({ close, isUpdate, updateName, updateEmail, updatedId }) {
+  console.log(updatedId);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
@@ -85,6 +87,7 @@ function AddContact({ close, isUpdate, updateName, updateEmail, updatedId }) {
           {isUpdate ? 'Update' : 'Add'} Contact
         </button>
       </div>
+
       <div className='absolute backdrop-blur top-0 h-screen w-screen place-items-center grid ' onClick={close} />
     </>
   );

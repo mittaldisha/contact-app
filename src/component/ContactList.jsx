@@ -2,32 +2,33 @@ import React, { useState } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { FaEdit } from 'react-icons/fa';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../config/Firebase';
+
 import NotFoundContact from './NotFoundContact';
 import AddContact from './AddContact';
 import useOpenClose from '../hooks/useOpenClose';
+import DeleteModal from './DeleteModal';
 
 function ContactList({ contact }) {
   const [updateName, setUpdateName] = useState('');
   const [updateEmail, setUpdateEmail] = useState('');
   const [updatedId, setUpdatedId] = useState('');
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const { isOpen, close, openList } = useOpenClose();
 
-  const deleteContact = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'contacts', id));
-    } catch (error) {
-      console.log(error, 'error');
-    }
-  };
   const updateHandler = (name, email, id) => {
     setUpdateName(name);
     setUpdateEmail(email);
     setUpdatedId(id);
     openList();
     
+  };
+  const deleteHandler = (id) => {
+    setDeleteModalOpen(true);
+    setUpdatedId(id);
+  };
+  const deleleModalClose = () => {
+    setDeleteModalOpen(false);
   };
 
   return (
@@ -39,6 +40,15 @@ function ContactList({ contact }) {
             close={close}
             updateName={updateName}
             updateEmail={updateEmail}
+            updatedId={updatedId}
+          />
+        )}
+      </div>
+      <div>
+        {deleteModalOpen && (
+          <DeleteModal
+            contact={contact}
+            deleteModalClose={deleleModalClose}
             updatedId={updatedId}
           />
         )}
@@ -57,7 +67,7 @@ function ContactList({ contact }) {
               <div className='flex text-4xl items-end text-green-800 w-full justify-end m-7 cursor-pointer'>
                 <FaEdit onClick={() => updateHandler(contact.name, contact.email, contact.id)} />
 
-                <MdDelete onClick={() => deleteContact(contact.id)} />
+                <MdDelete onClick={() => deleteHandler(contact.id)} />
               </div>
             </div>
           ))
